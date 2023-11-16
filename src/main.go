@@ -86,7 +86,7 @@ func main() {
 	go func() {
 		err := http.ListenAndServe(":8083", nil)
 		if err != nil {
-			log.Error("aasd")
+			log.Error("Failed to start server")
 		}
 	}()
 
