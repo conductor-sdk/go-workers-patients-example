@@ -8,6 +8,7 @@ import (
 	"github.com/conductor-sdk/conductor-go/sdk/worker"
 	"github.com/conductor-sdk/conductor-go/sdk/workflow/executor"
 	log "github.com/sirupsen/logrus"
+	"io/ioutil"
 	"net/http"
 	"os"
 	"time"
@@ -34,15 +35,29 @@ func runSyncWorkflow(w http.ResponseWriter, r *http.Request) {
 	log.Info("Request received")
 	workflowExecutor := executor.NewWorkflowExecutor(client)
 
+	body, err := ioutil.ReadAll(r.Body)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		log.Error(err.Error())
+		return
+	}
+	bodyMap := make(map[string]string)
+	err = json.Unmarshal(body, &bodyMap)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		log.Error(err.Error())
+		return
+	}
 	startRequest := model.NewStartWorkflowRequest(
 		"PatientWorkflow",
 		1,
 		"",
-		make(map[string]interface{}))
+		bodyMap)
 
 	workflow, err := workflowExecutor.ExecuteWorkflow(startRequest, "")
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
+		log.Error(err.Error())
 		return
 	}
 	log.Info("Executed workflow ", workflow.WorkflowId)
