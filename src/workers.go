@@ -42,8 +42,8 @@ func FindPatientWorker(task *model.Task) (result interface{}, err error) {
 		taskResult.ReasonForIncompletion = err.Error()
 		return taskResult, err
 	}
-	is_alphanumeric := regexp.MustCompile(`^[a-zA-Z0-9_]+$`).MatchString(tableName)
-	if !is_alphanumeric {
+	isAlphanumeric := regexp.MustCompile(`^[a-zA-Z0-9_]+$`).MatchString(tableName)
+	if !isAlphanumeric {
 		err = errors.New("table name is invalid")
 		taskResult.ReasonForIncompletion = err.Error()
 		return taskResult, err
@@ -122,8 +122,8 @@ func UpdatePatientWorker(task *model.Task) (result interface{}, err error) {
 		taskResult.ReasonForIncompletion = err.Error()
 		return taskResult, err
 	}
-	is_alphanumeric := regexp.MustCompile(`^[a-zA-Z0-9_]+$`).MatchString(tableName)
-	if !is_alphanumeric {
+	isAlphanumeric := regexp.MustCompile(`^[a-zA-Z0-9_]+$`).MatchString(tableName)
+	if !isAlphanumeric {
 		err = errors.New("table name is invalid")
 		taskResult.ReasonForIncompletion = err.Error()
 		return taskResult, err
